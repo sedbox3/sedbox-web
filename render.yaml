@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: sedbox-comics
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python web/app.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_BASE_URL
+        value: https://api.orcarouter.ai/v1
+      - key: LLM_MODEL
+        value: z-ai/glm-5.3-flash-free
