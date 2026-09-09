@@ -2,6 +2,7 @@
 
 import os
 import sys
+import gc
 import uuid
 import shutil
 import tempfile
@@ -17,11 +18,17 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from config import load_config
 from pipeline.pipeline import ComicPipeline, DetectionError
 
+# Memory optimization for low-RAM environments (WispByte free tier)
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["ORT_DISABLE_TELEMETRY"] = "1"
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
 
 # Temp directory for uploads/results
 TEMP_DIR = Path(tempfile.gettempdir()) / "comic_translator"
@@ -169,6 +176,10 @@ def process_file(job_id):
             logger.error(f"Processing failed for {job_id}: {e}", exc_info=True)
             with job_lock:
                 active_jobs[job_id] = {"status": "error", "error": str(e)}
+
+        finally:
+            # Memory cleanup for low-RAM environments
+            gc.collect()
 
     # Start background thread
     thread = threading.Thread(target=run_pipeline, daemon=True)

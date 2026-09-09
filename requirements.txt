@@ -1,21 +1,21 @@
-# Core
-opencv-python-headless>=4.8.0
-numpy>=1.24.0
-Pillow>=10.0.0
-httpx>=0.25.0
+# Core - lightweight for 512MB RAM
+opencv-python-headless==4.8.1.78
+numpy==1.24.4
+Pillow==10.1.0
+httpx==0.25.2
 
 # Arabic text shaping
-arabic-reshaper>=3.0.0
-python-bidi>=0.6.0
+arabic-reshaper==3.0.0
+python-bidi==0.6.0
 
-# OCR
-rapidocr_onnxruntime>=1.3.0
+# OCR - optional, loaded only if memory allows
+rapidocr_onnxruntime==1.3.4
 
 # Archive handling
-rarfile>=4.0
+rarfile==4.1
 
-# Web
-flask>=3.0.0
+# Web - lightweight
+flask==3.0.0
 
 # Config
-python-dotenv>=1.0.0
+python-dotenv==1.0.0
